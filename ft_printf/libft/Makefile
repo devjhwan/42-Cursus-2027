@@ -59,7 +59,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(AR) $(ARFLAGS) $(NAME) $(OBJS)
 
-$(OBJ_DIR)/%.o: %.c libft.h | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: %.c libft.h Makefile | $(OBJ_DIR)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_DIR):
