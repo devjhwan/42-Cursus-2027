@@ -1,0 +1,41 @@
+name: ft_printf Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      ft_printf: ${{ steps.filter.outputs.ft_printf }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            ft_printf:
+              - 'ft_printf/**'
+
+  check-ft_printf:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.ft_printf == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install Norminette
+        run: python -m pip install norminette
+      - name: Check Norminette
+        run: norminette ft_printf
+      - name: Compile mandatory and bonus
+        run: make -C ft_printf fclean all bonus
