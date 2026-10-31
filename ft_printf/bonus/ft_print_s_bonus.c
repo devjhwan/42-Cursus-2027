@@ -12,6 +12,16 @@
 
 #include "ft_printf_bonus.h"
 
+static void	init_values(t_conv conv, va_list args, char **str, int *len)
+{
+	*str = va_arg(args, char *);
+	if (!(*str))
+		*str = "(null)";
+	*len = (int)ft_strlen(*str);
+	if (conv.p >= 0 && conv.p < *len)
+		*len = conv.p;
+}
+
 int	ft_print_s(t_conv conv, va_list args)
 {
 	int		count;
@@ -19,12 +29,7 @@ int	ft_print_s(t_conv conv, va_list args)
 	char	*str;
 
 	count = 0;
-	str = va_arg(args, char *);
-	if (!str)
-		str = "(null)";
-	len = (int)ft_strlen(str);
-	if (conv.p >= 0 && conv.p < len)
-		len = conv.p;
+	init_values(conv, args, &str, &len);
 	if (!(conv.f & F_MINUS) && conv.w > len)
 	{
 		if (ft_append_padding(conv.w - len, ' ') < 0)
