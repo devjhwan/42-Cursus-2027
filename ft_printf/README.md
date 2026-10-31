@@ -2,52 +2,98 @@
 
 ## Description
 
-`ft_printf` is a C implementation of the standard `printf` function. It formats and writes characters, strings, pointers, signed and unsigned integers, hexadecimal values, and percent signs. It supports field width, precision, and the `-`, `0`, `#`, `+`, and space flags.
+`ft_printf` is a C implementation of `printf`, developed in two separate
+versions: the mandatory part and the bonus part. Both versions support the
+standard conversions required by the project: `c`, `s`, `p`, `d`, `i`, `u`,
+`x`, `X`, and `%%`.
 
-The format string is scanned from left to right. When a `%` is found, the parser stores the conversion's flags, width, precision, and specifier in a `t_conv` structure, then dispatches it to the matching conversion handler. Handlers format values into character arrays and append output to a fixed-size 1024-byte buffer, which is flushed to standard output when full and at the end of `ft_printf`. This keeps parsing, conversion, and writing separate while reducing individual system calls.
+## Mandatory
 
-## Algorithm and flag handling
+The mandatory version handles the required conversions without parsing flags,
+field width, or precision. Its output flow is:
 
-The formatting process follows these steps:
+1. `ft_printf` starts the variadic argument list, delegates processing to
+   `ft_vprintf`, and returns the number of characters written.
+2. `ft_vprintf` scans the format string from left to right. Ordinary characters
+   are written directly; when it encounters `%`, it passes the following
+   character and the argument list to `ft_handle_conversion`.
+3. `ft_handle_conversion` selects the output function for the conversion.
+   Character and string conversions use `ft_putchar` and `ft_putstr`; numeric
+   conversions use `ft_putnbr` or `ft_putnbr_base`.
+4. `ft_putnbr` writes a minus sign for negative signed values, then delegates
+   digit conversion to `ft_putnbr_base` in base 10. `ft_putnbr_base` counts the
+   digits, fills a character array from right to left, and writes the resulting
+   string.
+5. Each output function returns its written byte count. The conversion and
+   format-processing functions add these counts and return `-1` when an output
+   operation fails or a conversion is unsupported.
 
-1. Scan the format string from left to right, adding ordinary characters to the output buffer.
-2. At `%`, initialize a conversion description and parse the conversion using this format:
+The mandatory conversion handlers retrieve arguments using their expected
+variadic types:
+- `int` for `%c`, `%d`, and `%i`
+- `char *` for `%s`
+- `void *` for `%p`
+- `unsigned int` for `%u`, `%x`, and `%X`
+- `%%` writes one percent sign
+- null `%s` argument prints `(null)`, while a null `%p` argument prints `(nil)`
 
-   ```text
-   %[flags][width][.precision][specifier]
-   ```
+Build the mandatory library with:
 
-   The supported flags are `-`, `0`, `#`, `+`, and space. Width and precision are optional decimal numbers; precision begins with `.`. Supported specifiers are `c`, `s`, `p`, `d`, `i`, `u`, `x`, `X`, and `%`.
-3. Use the specifier to dispatch the conversion to its handler. The handler retrieves the matching argument from the `va_list`, formats it, and applies padding.
-4. Add the result to the output buffer and flush the buffer when full; `ft_printf` flushes the remaining output at the end.
+```sh
+make
+```
 
-The parsed flags are stored as a bit field in `t_conv`, alongside the width, precision, and specifier. Conversion handlers only apply the flags relevant to their type:
+## Bonus
 
-| Specifier | Flag behavior |
+The bonus version parses format strings using this structure:
+
+```text
+%[flags][width][.precision][specifier]
+```
+
+It supports the `-`, `0`, `#`, `+`, and space flags, field width, and precision.
+The conversions apply the relevant options as follows:
+
+| Specifier | Behavior |
 | --- | --- |
-| `%c` | `-` left-aligns the character; width adds space padding. Other flags and precision are ignored. |
-| `%s` | `-` left-aligns the string; width adds space padding. Precision limits the number of characters. Other flags are ignored. |
-| `%d`, `%i` | `-` left-aligns; `0` pads with zeroes when precision is not specified; `+` adds a plus sign to non-negative values; space adds a leading space when `+` is absent. Precision sets the minimum number of digits. |
-| `%u` | `-` left-aligns; `0` pads with zeroes when precision is not specified. Precision sets the minimum number of digits. `#`, `+`, and space do not affect this conversion. |
-| `%x`, `%X` | `-` left-aligns; `0` pads with zeroes when precision is not specified; `#` adds the `0x` or `0X` prefix for non-zero values. Precision sets the minimum number of digits. `+` and space are ignored. |
+| `%c` | `-` left-aligns; width adds space padding. Other flags and precision are ignored. |
+| `%s` | `-` left-aligns; width adds space padding; precision limits the number of characters. Other flags are ignored. |
+| `%d`, `%i` | `-` left-aligns; `0` pads with zeroes when precision is not specified; `+` adds a plus sign to non-negative values; space adds a leading space when `+` is absent; precision sets the minimum number of digits. |
+| `%u` | `-` left-aligns; `0` pads with zeroes when precision is not specified; precision sets the minimum number of digits. `#`, `+`, and space are ignored. |
+| `%x`, `%X` | `-` left-aligns; `0` pads with zeroes when precision is not specified; `#` adds the `0x` or `0X` prefix for non-zero values; precision sets the minimum number of digits. `+` and space are ignored. |
 | `%p` | `-` left-aligns; width adds space padding. Non-null pointers use a `0x` prefix and null pointers print as `(nil)`. Other flags and precision are ignored. |
-| `%%` | `-` left-aligns the percent sign; width adds space padding. Other flags and precision are ignored. |
+| `%%` | Writes one percent sign. Flags and width do not affect it. |
 
-## Instructions
+Build the bonus library with:
 
-Build the static library with `make`. Use `make clean` to remove object files, `make fclean` to remove all generated files, or `make re` to rebuild.
+```sh
+make bonus
+```
 
-Include `ft_printf.h` and link `libftprintf.a` when compiling your program:
+Both targets select their implementation in `libftprintf.a`. The Makefile
+keeps a separate archive for each version, so switching between mandatory and
+bonus updates the selected library without relinking an unchanged version.
+
+## Usage
+
+Include the appropriate header (`ft_printf.h` for mandatory or
+`bonus/ft_printf_bonus.h` for bonus) and link `libftprintf.a`:
 
 ```sh
 cc -Wall -Wextra -Werror -I. main.c -L. -lftprintf
 ```
 
-Call `ft_printf` like the standard function, for example: `ft_printf("Hello, %s!\n", "42");`.
+Example:
+
+```c
+ft_printf("Hello, %s!\n", "42");
+```
 
 ## Resources
 
 - [`printf(3)` manual](https://man7.org/linux/man-pages/man3/printf.3.html) — reference for formatted output.
 - [`stdarg(3)` manual](https://man7.org/linux/man-pages/man3/stdarg.3.html) — reference for variadic arguments.
 
-AI was used to assist with writing the project code and drafting this README. The algorithm design, parsing-stage ideas, and detailed code revisions were done by the author.
+AI was used to assist with writing the project code and drafting this README.
+The algorithm design, parsing-stage ideas, and detailed code revisions were
+done by the author.
