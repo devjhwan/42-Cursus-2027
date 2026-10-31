@@ -32,15 +32,21 @@ BONUS_SRCS	= bonus/ft_printf_bonus.c				\
 OBJS		= $(SRCS:%.c=$(OBJ_DIR)/%.o)
 BONUS_OBJS	= $(BONUS_SRCS:%.c=$(OBJ_DIR)/%.o)
 
-all: $(NAME)
+all: .mandatory
 
-$(NAME): $(LIBFT_A) $(OBJS)
+.mandatory: $(LIBFT_A) $(OBJS)
 	cp $(LIBFT_A) $(NAME)
 	$(AR) $(ARFLAGS) $(NAME) $(OBJS)
+	$(RM) .bonus
+	touch .mandatory
 
-bonus: $(LIBFT_A) $(BONUS_OBJS)
+bonus: .bonus
+
+.bonus: $(LIBFT_A) $(BONUS_OBJS)
 	cp $(LIBFT_A) $(NAME)
 	$(AR) $(ARFLAGS) $(NAME) $(BONUS_OBJS)
+	$(RM) .mandatory
+	touch .bonus
 
 $(LIBFT_A):
 	$(MAKE) -C $(LIBFT_DIR)
@@ -48,7 +54,7 @@ $(LIBFT_A):
 $(OBJ_DIR)/%.o: %.c ft_printf.h Makefile | $(OBJ_DIR)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-$(OBJ_DIR)/bonus/%.o: bonus/%.c ft_printf.h Makefile | $(OBJ_DIR)/bonus
+$(OBJ_DIR)/bonus/%.o: bonus/%.c bonus/ft_printf_bonus.h Makefile | $(OBJ_DIR)/bonus
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_DIR):
@@ -59,6 +65,7 @@ $(OBJ_DIR)/bonus:
 
 clean:
 	$(RM) $(OBJ_DIR)
+	$(RM) .mandatory .bonus
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean

@@ -2,3 +2,5 @@ libftprintf.a
 .obj
 **/README.md
 !/README.md
+.*
+!.gitignore
