@@ -13,19 +13,10 @@ LIBFT_A		= $(LIBFT_DIR)/libft.a
 
 SRCS		= ft_printf.c				\
 			  ft_vprintf.c				\
-			  ft_buffer.c				\
-			  ft_parse_conversion.c		\
-			  ft_handle_format.c		\
+			  ft_printf_util.c			\
 			  ft_handle_conversion.c	\
-			  ft_print_utils.c			\
-			  ft_print_c.c				\
-			  ft_print_s.c				\
-			  ft_print_percent.c		\
-			  ft_print_d_i.c			\
-			  ft_print_u_x.c			\
-			  ft_print_p.c
 
-BONUS_SRCS	= ft_printf.c							\
+BONUS_SRCS	= bonus/ft_printf_bonus.c				\
 			  bonus/ft_vprintf_bonus.c				\
 			  bonus/ft_buffer_bonus.c				\
 			  bonus/ft_parse_conversion_bonus.c		\
@@ -34,7 +25,6 @@ BONUS_SRCS	= ft_printf.c							\
 			  bonus/ft_print_utils_bonus.c			\
 			  bonus/ft_print_c_bonus.c				\
 			  bonus/ft_print_s_bonus.c				\
-			  bonus/ft_print_percent_bonus.c		\
 			  bonus/ft_print_d_i_bonus.c			\
 			  bonus/ft_print_u_x_bonus.c			\
 			  bonus/ft_print_p_bonus.c

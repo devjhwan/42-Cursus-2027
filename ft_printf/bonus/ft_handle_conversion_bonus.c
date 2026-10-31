@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 int	ft_handle_conversion(t_conv conv, va_list args)
 {
@@ -27,6 +27,10 @@ int	ft_handle_conversion(t_conv conv, va_list args)
 	if (conv.cs == 'x' || conv.cs == 'X')
 		return (ft_print_u_x(conv, args));
 	if (conv.cs == '%')
-		return (ft_print_percent(conv));
+	{
+		if (ft_buffer_write_char('%') < 0)
+			return (-1);
+		return (1);
+	}
 	return (-1);
 }

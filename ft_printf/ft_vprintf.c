@@ -22,16 +22,15 @@ int	ft_vprintf(const char *format, va_list args)
 	{
 		if (*format == '%')
 		{
-			if (ft_buffer_flush() < 0)
-				return (-1);
-			result = ft_handle_format(&format, args);
+			result = ft_handle_conversion(*(format + 1), args);
 			if (result < 0)
 				return (-1);
 			printed_chars += result;
+			format += 2;
 		}
 		else
 		{
-			if (ft_buffer_write_char(*format) < 0)
+			if (ft_putchar(*format) < 0)
 				return (-1);
 			printed_chars++;
 			format++;

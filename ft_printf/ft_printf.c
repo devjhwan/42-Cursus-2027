@@ -20,8 +20,6 @@ int	ft_printf(const char *format, ...)
 	va_start(args, format);
 	printed_chars = ft_vprintf(format, args);
 	va_end(args);
-	if (ft_buffer_flush() < 0)
-		return (-1);
 	if (printed_chars < 0)
 		return (-1);
 	return (printed_chars);

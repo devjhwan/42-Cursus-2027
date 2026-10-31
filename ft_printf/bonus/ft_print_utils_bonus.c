@@ -10,36 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
-int	ft_write_repeat(char c, int count)
+int	ft_append_padding(int pad_len, char pad_char)
 {
 	int	written;
 
+	if (pad_len <= 0)
+		return (0);
 	written = 0;
-	while (written < count)
+	while (written < pad_len)
 	{
-		if (ft_buffer_write_char(c) < 0)
+		if (ft_buffer_write_char(pad_char) < 0)
 			return (-1);
 		written++;
 	}
 	return (written);
 }
 
-int	ft_append_padding(int *count, int pad_len, char pad_char)
-{
-	int	pad;
-
-	if (pad_len <= 0)
-		return (0);
-	pad = ft_write_repeat(pad_char, pad_len);
-	if (pad < 0)
-		return (-1);
-	*count += pad;
-	return (0);
-}
-
-int	ft_write_str_n(const char *s, int len)
+int	ft_write_bytes(const char *s, int len)
 {
 	int	written;
 

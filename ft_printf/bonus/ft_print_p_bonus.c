@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 static void	init_pctx_value(t_pctx *ctx, va_list args)
 {
@@ -32,19 +32,17 @@ static int	write_pointer_body(t_pctx *ctx, int *count)
 {
 	if (ctx->value == 0)
 	{
-		if (ft_write_str_n("(nil)", 5) < 0)
+		if (ft_write_bytes("(nil)", 5) < 0)
 			return (-1);
 		*count += 5;
 		return (0);
 	}
-	if (ft_buffer_write_char('0') < 0)
-		return (-1);
-	if (ft_buffer_write_char('x') < 0)
+	if (ft_write_bytes("0x", 2) < 0)
 		return (-1);
 	*count += 2;
 	if (ctx->dlen > 0)
 	{
-		if (ft_write_str_n(ctx->digits, ctx->dlen) < 0)
+		if (ft_write_bytes(ctx->digits, ctx->dlen) < 0)
 			return (-1);
 		*count += ctx->dlen;
 	}
@@ -59,17 +57,19 @@ int	ft_print_p(t_conv conv, va_list args)
 	init_pctx_value(&ctx, args);
 	init_pctx_padding(&ctx, conv);
 	count = 0;
-	if (!(conv.f & F_MINUS))
+	if (!(conv.f & F_MINUS) && ctx.spaces > 0)
 	{
-		if (ft_append_padding(&count, ctx.spaces, ' ') < 0)
+		if (ft_append_padding(ctx.spaces, ' ') < 0)
 			return (-1);
+		count += ctx.spaces;
 	}
 	if (write_pointer_body(&ctx, &count) < 0)
 		return (-1);
-	if (conv.f & F_MINUS)
+	if (conv.f & F_MINUS && ctx.spaces > 0)
 	{
-		if (ft_append_padding(&count, ctx.spaces, ' ') < 0)
+		if (ft_append_padding(ctx.spaces, ' ') < 0)
 			return (-1);
+		count += ctx.spaces;
 	}
 	return (count);
 }

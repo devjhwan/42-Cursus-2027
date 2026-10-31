@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 static void	init_uxctx_value(t_uxctx *ctx, t_conv conv, va_list args)
 {
@@ -59,12 +59,13 @@ static int	write_ux_body(t_uxctx *ctx, int *count)
 	}
 	if (ctx->zeros > 0)
 	{
-		if (ft_append_padding(count, ctx->zeros, '0') < 0)
+		if (ft_append_padding(ctx->zeros, '0') < 0)
 			return (-1);
+		*count += ctx->zeros;
 	}
 	if (ctx->dlen > 0)
 	{
-		if (ft_write_str_n(ctx->digits, ctx->dlen) < 0)
+		if (ft_write_bytes(ctx->digits, ctx->dlen) < 0)
 			return (-1);
 		*count += ctx->dlen;
 	}
@@ -79,17 +80,19 @@ int	ft_print_u_x(t_conv conv, va_list args)
 	init_uxctx_value(&ctx, conv, args);
 	init_uxctx_padding(&ctx, conv);
 	count = 0;
-	if (!(conv.f & F_MINUS))
+	if (!(conv.f & F_MINUS) && ctx.spaces > 0)
 	{
-		if (ft_append_padding(&count, ctx.spaces, ' ') < 0)
+		if (ft_append_padding(ctx.spaces, ' ') < 0)
 			return (-1);
+		count += ctx.spaces;
 	}
 	if (write_ux_body(&ctx, &count) < 0)
 		return (-1);
-	if (conv.f & F_MINUS)
+	if (conv.f & F_MINUS && ctx.spaces > 0)
 	{
-		if (ft_append_padding(&count, ctx.spaces, ' ') < 0)
+		if (ft_append_padding(ctx.spaces, ' ') < 0)
 			return (-1);
+		count += ctx.spaces;
 	}
 	return (count);
 }

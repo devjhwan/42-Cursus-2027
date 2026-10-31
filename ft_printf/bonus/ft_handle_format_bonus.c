@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 static void	init_conv(t_conv *conv)
 {
@@ -25,7 +25,6 @@ int	ft_handle_format(const char **format, va_list args)
 	t_conv	conv;
 	int		parsed_len;
 
-	(void)args;
 	if (**format != '%')
 		return (-1);
 	init_conv(&conv);

@@ -1,36 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_c.c                                       :+:      :+:    :+:   */
+/*   ft_printf_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junghwal <junghwal@student.42barcel>       #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026-10-30 15:09:17 by junghwal          #+#    #+#             */
-/*   Updated: 2026-10-30 15:09:17 by junghwal         ###   ########.fr       */
+/*   Created: 2026-10-30 15:09:54 by junghwal          #+#    #+#             */
+/*   Updated: 2026-10-30 15:09:54 by junghwal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
-int	ft_print_c(t_conv conv, va_list args)
+int	ft_printf(const char *format, ...)
 {
-	int		count;
-	char	c;
+	va_list	args;
+	int		printed_chars;
 
-	count = 0;
-	c = (char)va_arg(args, int);
-	if (!(conv.f & F_MINUS))
-	{
-		if (ft_append_padding(&count, conv.w - 1, ' ') < 0)
-			return (-1);
-	}
-	if (ft_buffer_write_char(c) < 0)
+	va_start(args, format);
+	printed_chars = ft_vprintf(format, args);
+	va_end(args);
+	if (ft_buffer_flush() < 0)
 		return (-1);
-	count++;
-	if (conv.f & F_MINUS)
-	{
-		if (ft_append_padding(&count, conv.w - 1, ' ') < 0)
-			return (-1);
-	}
-	return (count);
+	if (printed_chars < 0)
+		return (-1);
+	return (printed_chars);
 }

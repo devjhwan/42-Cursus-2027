@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 int	ft_print_s(t_conv conv, va_list args)
 {
@@ -25,18 +25,20 @@ int	ft_print_s(t_conv conv, va_list args)
 	len = (int)ft_strlen(str);
 	if (conv.p >= 0 && conv.p < len)
 		len = conv.p;
-	if (!(conv.f & F_MINUS))
+	if (!(conv.f & F_MINUS) && conv.w > len)
 	{
-		if (ft_append_padding(&count, conv.w - len, ' ') < 0)
+		if (ft_append_padding(conv.w - len, ' ') < 0)
 			return (-1);
+		count += conv.w - len;
 	}
-	if (ft_write_str_n(str, len) < 0)
+	if (ft_write_bytes(str, len) < 0)
 		return (-1);
 	count += len;
-	if (conv.f & F_MINUS)
+	if (conv.f & F_MINUS && conv.w > len)
 	{
-		if (ft_append_padding(&count, conv.w - len, ' ') < 0)
+		if (ft_append_padding(conv.w - len, ' ') < 0)
 			return (-1);
+		count += conv.w - len;
 	}
 	return (count);
 }
