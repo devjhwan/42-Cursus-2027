@@ -1,0 +1,8 @@
+.obj
+checker
+push_swap
+*.o
+.*
+!.gitignore
+*.md
+!README.md

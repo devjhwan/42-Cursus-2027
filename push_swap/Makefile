@@ -26,10 +26,32 @@ SRCS		= push_swap.c		\
 
 OBJS		= $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
+CHECKER_SRCS	= checker_bonus.c	\
+			  checker_util_bonus.c	\
+			  a_push.c			\
+			  a_rotate.c		\
+			  a_rrotate.c		\
+			  a_swap.c			\
+			  stack_util.c		\
+			  parse_nbr.c		\
+			  set_rank.c		\
+			  ft_putstr.c		\
+			  ft_split.c		\
+			  ft_split_utils.c	\
+			  get_next_line_bonus.c	\
+			  get_next_line_utils_bonus.c
+
+CHECKER_OBJS	= $(CHECKER_SRCS:%.c=$(OBJ_DIR)/%.o)
+
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+
+checker: $(CHECKER_OBJS)
+	$(CC) $(CFLAGS) $(CHECKER_OBJS) -o checker
+
+bonus: checker
 
 $(OBJ_DIR)/%.o: %.c push_swap.h Makefile | $(OBJ_DIR)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
@@ -41,8 +63,8 @@ clean:
 	$(RM) $(OBJ_DIR)
 
 fclean: clean
-	$(RM) $(NAME)
+	$(RM) $(NAME) checker
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all bonus clean fclean re
