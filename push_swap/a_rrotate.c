@@ -22,18 +22,18 @@ static void	rrotate(t_stack **s)
 void	rra(t_stack **a)
 {
 	rrotate(a);
-	ft_putstr_fd("rra\n", 1);
+	buffer_add(CMD_RRA);
 }
 
 void	rrb(t_stack **b)
 {
 	rrotate(b);
-	ft_putstr_fd("rrb\n", 1);
+	buffer_add(CMD_RRB);
 }
 
 void	rrr(t_stack **a, t_stack **b)
 {
 	rrotate(a);
 	rrotate(b);
-	ft_putstr_fd("rrr\n", 1);
+	buffer_add(CMD_RRR);
 }

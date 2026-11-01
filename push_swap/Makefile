@@ -13,6 +13,8 @@ SRCS		= push_swap.c		\
 			  sort_b_to_a.c		\
 			  set_rank.c		\
 			  stack_util.c		\
+			  buffer.c			\
+			  buffer_util.c		\
 			  parse_nbr.c		\
 			  a_push.c			\
 			  a_rotate.c		\

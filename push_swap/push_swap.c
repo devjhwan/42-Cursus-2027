@@ -74,6 +74,9 @@ int	main(int argc, char **argv)
 	if (set_rank(&stack_a, size) < 0)
 		return (free_stack(&stack_a), ft_putstr_fd("Error\n", 2), -1);
 	sort(&stack_a, &stack_b, size);
+	if (buffer_flush() < 0)
+		return (free_stack(&stack_a), free_stack(&stack_b),
+			ft_putstr_fd("Error\n", 2), -1);
 	free_stack(&stack_a);
 	free_stack(&stack_b);
 	return (0);

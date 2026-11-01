@@ -26,18 +26,18 @@ static void	swap(t_stack **s)
 void	sa(t_stack **a)
 {
 	swap(a);
-	ft_putstr_fd("sa\n", 1);
+	buffer_add(CMD_SA);
 }
 
 void	sb(t_stack **b)
 {
 	swap(b);
-	ft_putstr_fd("sb\n", 1);
+	buffer_add(CMD_SB);
 }
 
 void	ss(t_stack **a, t_stack **b)
 {
 	swap(a);
 	swap(b);
-	ft_putstr_fd("ss\n", 1);
+	buffer_add(CMD_SS);
 }

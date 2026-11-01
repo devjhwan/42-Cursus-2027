@@ -26,11 +26,11 @@ static void	push(t_stack **dst, t_stack **src)
 void	pa(t_stack **a, t_stack **b)
 {
 	push(a, b);
-	ft_putstr_fd("pa\n", 1);
+	buffer_add(CMD_PA);
 }
 
 void	pb(t_stack **a, t_stack **b)
 {
 	push(b, a);
-	ft_putstr_fd("pb\n", 1);
+	buffer_add(CMD_PB);
 }

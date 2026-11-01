@@ -32,6 +32,21 @@ typedef struct s_pivot
 	int	min;
 }	t_pivot;
 
+enum e_command
+{
+	CMD_PA,
+	CMD_PB,
+	CMD_RA,
+	CMD_RB,
+	CMD_RR,
+	CMD_RRA,
+	CMD_RRB,
+	CMD_RRR,
+	CMD_SA,
+	CMD_SB,
+	CMD_SS
+};
+
 //ft_utils
 void	ft_putstr_fd(char *str, int fd);
 char	**ft_split(char *str);
@@ -42,6 +57,10 @@ void	push_node(t_stack **stack, t_stack *node);
 void	append_node(t_stack **stack, t_stack *node);
 t_stack	*pop_node(t_stack **stack);
 void	free_stack(t_stack **stack);
+void	buffer_add(int command);
+int		buffer_flush(void);
+int		buffer_merge_command(t_stack **buffer, int command);
+void	buffer_print_command(int command);
 //parse
 int		parse_nbr(char *str, int *nbr);
 int		isduplicated(t_stack **stack, int nbr);
